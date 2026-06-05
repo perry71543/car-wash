@@ -3,16 +3,16 @@ import Link from 'next/link'
 
 export const metadata = {
   title: '品牌故事 — DetailPro',
-  description: '了解 DetailPro 的品牌理念與專業承諾',
+  description: '了解 DetailPro 的品牌理念與專業承諾。從台灣車庫起家，打造媲美進口的頂級汽車美容品牌。',
 }
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen pt-16">
-      {/* Hero */}
+      {/* Hero — 使用與首頁不同的圖片 */}
       <section className="relative h-[60vh] min-h-[400px] flex items-end overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=90"
+          src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&q=90"
           alt="品牌故事"
           fill
           className="object-cover opacity-40"

@@ -1,6 +1,8 @@
 import Link from 'next/link'
 
 export default function Footer() {
+  const year = new Date().getFullYear()
+
   return (
     <footer className="bg-dark-2 border-t border-white/5 mt-24">
       <div className="max-w-7xl mx-auto px-6 py-16">
@@ -20,15 +22,27 @@ export default function Footer() {
               來自台灣的頂級汽車美容品牌。我們相信每一輛車都值得最好的護理，從配方研發到施工工具，一切只為讓您的愛車永保最佳狀態。
             </p>
             <div className="flex gap-3 mt-6">
-              {['FB', 'IG', 'YT'].map((s) => (
-                <a
-                  key={s}
-                  href="#"
-                  className="w-8 h-8 border border-white/10 flex items-center justify-center text-xs text-zinc-400 hover:border-neon hover:text-neon transition-all"
-                >
-                  {s}
-                </a>
-              ))}
+              <a
+                href="https://www.facebook.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 border border-white/10 flex items-center justify-center text-xs text-zinc-400 hover:border-neon hover:text-neon transition-all"
+                aria-label="Facebook"
+              >FB</a>
+              <a
+                href="https://www.instagram.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 border border-white/10 flex items-center justify-center text-xs text-zinc-400 hover:border-neon hover:text-neon transition-all"
+                aria-label="Instagram"
+              >IG</a>
+              <a
+                href="https://www.youtube.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 border border-white/10 flex items-center justify-center text-xs text-zinc-400 hover:border-neon hover:text-neon transition-all"
+                aria-label="YouTube"
+              >YT</a>
             </div>
           </div>
 
@@ -36,10 +50,16 @@ export default function Footer() {
           <div>
             <h4 className="font-display uppercase tracking-widest text-sm font-600 mb-4">商品分類</h4>
             <ul className="flex flex-col gap-2">
-              {['洗車精', '鍍膜蠟', '美容工具', '套組禮盒', '新品上市'].map((item) => (
-                <li key={item}>
-                  <Link href="/products" className="text-zinc-400 text-sm hover:text-neon transition-colors font-body">
-                    {item}
+              {[
+                { label: '洗車精', href: '/products?category=shampoo' },
+                { label: '鍍膜蠟', href: '/products?category=coating' },
+                { label: '美容工具', href: '/products?category=tools' },
+                { label: '套組禮盒', href: '/products?category=kits' },
+                { label: '全部商品', href: '/products' },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <Link href={href} className="text-zinc-400 text-sm hover:text-neon transition-colors font-body">
+                    {label}
                   </Link>
                 </li>
               ))}
@@ -50,10 +70,16 @@ export default function Footer() {
           <div>
             <h4 className="font-display uppercase tracking-widest text-sm font-600 mb-4">服務資訊</h4>
             <ul className="flex flex-col gap-2">
-              {['品牌故事', '使用教學', '常見問題', '聯絡我們', '退換貨政策'].map((item) => (
-                <li key={item}>
-                  <Link href="/about" className="text-zinc-400 text-sm hover:text-neon transition-colors font-body">
-                    {item}
+              {[
+                { label: '品牌故事', href: '/about' },
+                { label: '使用教學', href: '/tutorial' },
+                { label: '常見問題', href: '/faq' },
+                { label: '聯絡我們', href: '/contact' },
+                { label: '退換貨政策', href: '/returns' },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <Link href={href} className="text-zinc-400 text-sm hover:text-neon transition-colors font-body">
+                    {label}
                   </Link>
                 </li>
               ))}
@@ -64,7 +90,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-zinc-600 text-xs font-body">
-            © 2025 DetailPro Taiwan. 保留一切權利。
+            © {year} DetailPro Taiwan. 保留一切權利。
           </p>
           <div className="flex items-center gap-6">
             <span className="text-zinc-600 text-xs">全台免運 滿 $1,500</span>

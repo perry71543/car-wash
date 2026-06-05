@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 
 export default function BeforeAfterSection() {
@@ -8,15 +8,30 @@ export default function BeforeAfterSection() {
   const containerRef = useRef(null)
   const dragging = useRef(false)
 
-  const handleMove = (clientX) => {
+  const handleMove = useCallback((clientX) => {
     if (!containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
     const x = Math.min(Math.max(clientX - rect.left, 0), rect.width)
     setSliderPos((x / rect.width) * 100)
-  }
+  }, [])
 
   const handleMouseMove = (e) => { if (dragging.current) handleMove(e.clientX) }
-  const handleTouchMove = (e) => { handleMove(e.touches[0].clientX) }
+
+  // Prevent page scroll while dragging on touch devices
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const onTouchMove = (e) => {
+      if (dragging.current) {
+        e.preventDefault()
+        handleMove(e.touches[0].clientX)
+      }
+    }
+
+    el.addEventListener('touchmove', onTouchMove, { passive: false })
+    return () => el.removeEventListener('touchmove', onTouchMove)
+  }, [handleMove])
 
   return (
     <section className="py-24 bg-dark-2">
@@ -42,7 +57,6 @@ export default function BeforeAfterSection() {
           onMouseMove={handleMouseMove}
           onMouseUp={() => { dragging.current = false }}
           onMouseLeave={() => { dragging.current = false }}
-          onTouchMove={handleTouchMove}
           onTouchEnd={() => { dragging.current = false }}
         >
           {/* Before (full) */}
@@ -52,7 +66,6 @@ export default function BeforeAfterSection() {
             fill
             className="object-cover"
           />
-          {/* Dirty overlay */}
           <div className="absolute inset-0 bg-amber-950/40 mix-blend-multiply" />
 
           {/* After (clipped) */}
@@ -82,7 +95,6 @@ export default function BeforeAfterSection() {
             className="absolute top-0 bottom-0 w-0.5 bg-neon z-10"
             style={{ left: `${sliderPos}%` }}
           >
-            {/* Handle */}
             <div
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-neon rounded-full flex items-center justify-center shadow-lg cursor-grab active:cursor-grabbing neon-glow"
               onMouseDown={() => { dragging.current = true }}

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
+import Link from 'next/link'
 import ProductCard from '@/components/ProductCard'
 import { products, categories } from '@/data/products'
 
@@ -41,7 +42,6 @@ function ProductsContent() {
       <div className="max-w-7xl mx-auto px-6 py-10">
         {/* Filters */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
-          {/* Category tabs */}
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActive('all')}
@@ -68,7 +68,6 @@ function ProductsContent() {
             ))}
           </div>
 
-          {/* Sort */}
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
@@ -81,12 +80,10 @@ function ProductsContent() {
           </select>
         </div>
 
-        {/* Count */}
         <p className="text-zinc-600 text-xs font-body mb-6 uppercase tracking-wider">
           共 {filtered.length} 項商品
         </p>
 
-        {/* Grid */}
         {filtered.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filtered.map((p) => (
@@ -94,9 +91,21 @@ function ProductsContent() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-24">
-            <div className="text-5xl mb-4">🔍</div>
+          <div className="text-center py-24 flex flex-col items-center gap-5">
+            <div className="text-5xl">🔍</div>
             <p className="text-zinc-400 font-body">此分類目前沒有商品</p>
+            <button
+              onClick={() => setActive('all')}
+              className="bg-neon text-black font-display font-700 uppercase tracking-widest px-6 py-3 text-xs hover:bg-neon-dim transition-colors"
+            >
+              查看全部商品
+            </button>
+            <Link
+              href="/"
+              className="text-zinc-500 text-xs font-body hover:text-neon transition-colors underline underline-offset-4"
+            >
+              回首頁
+            </Link>
           </div>
         )}
       </div>
@@ -106,7 +115,14 @@ function ProductsContent() {
 
 export default function ProductsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen pt-24 flex items-center justify-center"><div className="text-zinc-500">載入中...</div></div>}>
+    <Suspense fallback={
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-2 border-white/10 border-t-neon rounded-full animate-spin" />
+          <span className="text-zinc-500 text-xs font-display uppercase tracking-widest">載入中</span>
+        </div>
+      </div>
+    }>
       <ProductsContent />
     </Suspense>
   )
