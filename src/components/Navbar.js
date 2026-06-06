@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useCart } from '@/context/CartContext'
 import { products } from '@/data/products'
 
@@ -11,10 +11,22 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [query, setQuery] = useState('')
+  const [mobileQuery, setMobileQuery] = useState('')
+  const [mobileResults, setMobileResults] = useState([])
   const searchRef = useRef(null)
   const inputRef = useRef(null)
   const { totalCount, setIsOpen: openCart } = useCart()
   const router = useRouter()
+  const pathname = usePathname()
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMenuOpen(false)
+    setSearchOpen(false)
+    setQuery('')
+    setMobileQuery('')
+    setMobileResults([])
+  }, [pathname])
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40)
@@ -27,7 +39,9 @@ export default function Navbar() {
   }, [searchOpen])
 
   useEffect(() => {
-    const handleKey = (e) => { if (e.key === 'Escape') { setSearchOpen(false); setQuery('') } }
+    const handleKey = (e) => {
+      if (e.key === 'Escape') { setSearchOpen(false); setQuery('') }
+    }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
   }, [])
@@ -43,6 +57,12 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [searchOpen])
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
+
   const results = query.length >= 1
     ? products.filter((p) =>
         p.name.includes(query) ||
@@ -51,10 +71,28 @@ export default function Navbar() {
       ).slice(0, 5)
     : []
 
+  const handleMobileQuery = (q) => {
+    setMobileQuery(q)
+    if (q.length >= 1) {
+      const r = products.filter((p) =>
+        p.name.includes(q) ||
+        p.shortDesc.includes(q) ||
+        p.categoryLabel.includes(q)
+      ).slice(0, 5)
+      setMobileResults(r)
+    } else {
+      setMobileResults([])
+    }
+  }
+
   const handleSearchSubmit = (e) => {
     e.preventDefault()
     if (results.length === 1) {
       router.push(`/products/${results[0].id}`)
+      setSearchOpen(false)
+      setQuery('')
+    } else if (results.length > 1) {
+      router.push('/products')
       setSearchOpen(false)
       setQuery('')
     }
@@ -71,7 +109,9 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'bg-black/95 backdrop-blur-md border-b border-white/5' : 'bg-transparent'
+        scrolled || menuOpen
+          ? 'bg-black/95 backdrop-blur-md border-b border-white/5'
+          : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -115,7 +155,6 @@ export default function Navbar() {
               </svg>
             </button>
 
-            {/* Search dropdown */}
             {searchOpen && (
               <div className="absolute right-0 top-full mt-2 w-80 bg-dark-2 border border-white/10 shadow-2xl">
                 <form onSubmit={handleSearchSubmit} className="flex items-center border-b border-white/5">
@@ -207,9 +246,9 @@ export default function Navbar() {
             aria-label="開啟選單"
           >
             <div className="w-6 flex flex-col gap-1.5">
-              <span className={`h-0.5 bg-white transition-all ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`h-0.5 bg-white transition-all ${menuOpen ? 'opacity-0' : ''}`} />
-              <span className={`h-0.5 bg-white transition-all ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              <span className={`h-0.5 bg-white transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`h-0.5 bg-white transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+              <span className={`h-0.5 bg-white transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
             </div>
           </button>
         </div>
@@ -217,26 +256,51 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-black/98 border-t border-white/5 px-6 py-6 flex flex-col gap-4">
+        <div className="md:hidden bg-black/98 border-t border-white/5 px-6 py-6 flex flex-col gap-4 max-h-[calc(100vh-4rem)] overflow-y-auto">
           {/* Mobile search */}
-          <div className="flex items-center border border-white/10 px-3">
-            <svg className="text-zinc-500 flex-shrink-0" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-            </svg>
-            <input
-              type="text"
-              placeholder="搜尋商品..."
-              className="w-full bg-transparent text-sm font-body text-white placeholder-zinc-600 px-3 py-2.5 focus:outline-none"
-              onChange={(e) => {
-                const q = e.target.value
-                if (q.length >= 1) {
-                  const r = products.filter((p) => p.name.includes(q) || p.shortDesc.includes(q))
-                  if (r.length === 1) { router.push(`/products/${r[0].id}`); setMenuOpen(false) }
-                  else if (r.length > 1) { router.push(`/products`); setMenuOpen(false) }
-                }
-              }}
-            />
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center border border-white/10 px-3">
+              <svg className="text-zinc-500 flex-shrink-0" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input
+                type="text"
+                placeholder="搜尋商品..."
+                value={mobileQuery}
+                className="w-full bg-transparent text-sm font-body text-white placeholder-zinc-600 px-3 py-2.5 focus:outline-none"
+                onChange={(e) => handleMobileQuery(e.target.value)}
+              />
+              {mobileQuery && (
+                <button type="button" onClick={() => { setMobileQuery(''); setMobileResults([]) }} className="text-zinc-500 hover:text-white">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+                </button>
+              )}
+            </div>
+            {/* Mobile search results */}
+            {mobileResults.length > 0 && (
+              <div className="bg-dark-3 border border-white/10">
+                {mobileResults.map((p) => (
+                  <Link
+                    key={p.id}
+                    href={`/products/${p.id}`}
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 hover:bg-dark-4 transition-colors"
+                  >
+                    <div>
+                      <div className="text-sm font-display font-600 text-neon">{p.name}</div>
+                      <div className="text-xs text-zinc-500 font-body">{p.categoryLabel} · NT${p.price.toLocaleString()}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+            {mobileQuery.length >= 1 && mobileResults.length === 0 && (
+              <p className="px-1 text-sm text-zinc-500 font-body">找不到「{mobileQuery}」相關商品</p>
+            )}
           </div>
+
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}

@@ -42,7 +42,7 @@ export default function FaqPage() {
   const [open, setOpen] = useState(null)
 
   return (
-    <div className="min-h-screen pt-24">
+    <div className="min-h-screen pt-16">
       <div className="bg-dark-2 border-b border-white/5 py-12">
         <div className="max-w-3xl mx-auto px-6">
           <div className="flex items-center gap-3 mb-3">

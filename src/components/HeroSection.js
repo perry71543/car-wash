@@ -10,6 +10,7 @@ export default function HeroSection() {
           src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=90"
           alt="黑色跑車"
           fill
+          sizes="100vw"
           className="object-cover opacity-30"
           priority
         />

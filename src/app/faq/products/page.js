@@ -1,24 +1,37 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import ProductCard from '@/components/ProductCard'
+import ProductCardSkeleton from '@/components/ProductCardSkeleton'
 import { products, categories } from '@/data/products'
 
 function ProductsContent() {
   const searchParams = useSearchParams()
   const [active, setActive] = useState('all')
   const [sort, setSort] = useState('default')
+  const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState(true)
+  const searchInputRef = useRef(null)
 
   useEffect(() => {
     const cat = searchParams.get('category')
     if (cat) setActive(cat)
+    // Simulate loading for skeleton
+    const t = setTimeout(() => setLoading(false), 500)
+    return () => clearTimeout(t)
   }, [searchParams])
 
   const filtered = products
     .filter((p) => active === 'all' || p.category === active)
+    .filter((p) =>
+      search.length < 1 ||
+      p.name.includes(search) ||
+      p.shortDesc.includes(search) ||
+      p.categoryLabel.includes(search)
+    )
     .sort((a, b) => {
       if (sort === 'price-asc') return a.price - b.price
       if (sort === 'price-desc') return b.price - a.price
@@ -26,8 +39,14 @@ function ProductsContent() {
       return 0
     })
 
+  const handleCategoryChange = (cat) => {
+    setActive(cat)
+    setLoading(true)
+    setTimeout(() => setLoading(false), 350)
+  }
+
   return (
-    <div className="min-h-screen pt-24">
+    <div className="min-h-screen pt-16">
       {/* Header */}
       <div className="bg-dark-2 border-b border-white/5 py-12">
         <div className="max-w-7xl mx-auto px-6">
@@ -40,11 +59,39 @@ function ProductsContent() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-10">
+        {/* Search bar */}
+        <div className="relative mb-6">
+          <svg
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none"
+            width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"
+          >
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            ref={searchInputRef}
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="搜尋商品名稱、分類..."
+            className="w-full bg-dark-3 border border-white/10 text-white text-sm font-body pl-11 pr-10 py-3 focus:outline-none focus:border-neon transition-colors placeholder-zinc-600"
+          />
+          {search && (
+            <button
+              onClick={() => { setSearch(''); searchInputRef.current?.focus() }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+            >
+              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          )}
+        </div>
+
         {/* Filters */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => setActive('all')}
+              onClick={() => handleCategoryChange('all')}
               className={`px-4 py-1.5 text-xs font-display font-600 uppercase tracking-wider transition-all ${
                 active === 'all'
                   ? 'bg-neon text-black'
@@ -56,7 +103,7 @@ function ProductsContent() {
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setActive(cat.id)}
+                onClick={() => handleCategoryChange(cat.id)}
                 className={`px-4 py-1.5 text-xs font-display font-600 uppercase tracking-wider transition-all ${
                   active === cat.id
                     ? 'bg-neon text-black'
@@ -81,10 +128,14 @@ function ProductsContent() {
         </div>
 
         <p className="text-zinc-600 text-xs font-body mb-6 uppercase tracking-wider">
-          共 {filtered.length} 項商品
+          共 {filtered.length} 項商品{search ? `（搜尋：${search}）` : ''}
         </p>
 
-        {filtered.length > 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, i) => <ProductCardSkeleton key={i} />)}
+          </div>
+        ) : filtered.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filtered.map((p) => (
               <ProductCard key={p.id} product={p} />
@@ -93,9 +144,11 @@ function ProductsContent() {
         ) : (
           <div className="text-center py-24 flex flex-col items-center gap-5">
             <div className="text-5xl">🔍</div>
-            <p className="text-zinc-400 font-body">此分類目前沒有商品</p>
+            <p className="text-zinc-400 font-body">
+              {search ? `找不到「${search}」相關商品` : '此分類目前沒有商品'}
+            </p>
             <button
-              onClick={() => setActive('all')}
+              onClick={() => { setActive('all'); setSearch('') }}
               className="bg-neon text-black font-display font-700 uppercase tracking-widest px-6 py-3 text-xs hover:bg-neon-dim transition-colors"
             >
               查看全部商品
@@ -116,10 +169,17 @@ function ProductsContent() {
 export default function ProductsPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen pt-24 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-8 h-8 border-2 border-white/10 border-t-neon rounded-full animate-spin" />
-          <span className="text-zinc-500 text-xs font-display uppercase tracking-widest">載入中</span>
+      <div className="min-h-screen pt-16">
+        <div className="bg-dark-2 border-b border-white/5 py-12">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="h-4 w-24 skeleton rounded mb-3" />
+            <div className="h-12 w-48 skeleton rounded" />
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 py-10">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, i) => <ProductCardSkeleton key={i} />)}
+          </div>
         </div>
       </div>
     }>

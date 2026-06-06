@@ -22,10 +22,16 @@ module.exports = {
         display: ['var(--font-display)', 'sans-serif'],
         body: ['var(--font-body)', 'sans-serif'],
       },
+      fontWeight: {
+        600: '600',
+        700: '700',
+        800: '800',
+        900: '900',
+      },
       animation: {
         'fade-up': 'fadeUp 0.6s ease forwards',
         'fade-in': 'fadeIn 0.8s ease forwards',
-        shimmer: 'shimmer 2s linear infinite',
+        shimmer: 'shimmer 1.5s linear infinite',
         'slide-in': 'slideIn 0.5s ease forwards',
       },
       keyframes: {
@@ -38,8 +44,8 @@ module.exports = {
           '100%': { opacity: '1' },
         },
         shimmer: {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(100%)' },
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
         },
         slideIn: {
           '0%': { opacity: '0', transform: 'translateX(-20px)' },
