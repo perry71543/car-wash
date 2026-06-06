@@ -30,7 +30,7 @@ export default function ContactPage() {
         {/* Contact info */}
         <div className="grid md:grid-cols-3 gap-4 mb-16">
           {[
-            { icon: '📧', label: '電子郵件', value: 'service@detailpro.tw', sub: '工作日 24 小時內回覆' },
+            { icon: '📧', label: '電子郵件', value: 'service@detailpro.tw', sub: '工作日24小時內回覆' },
             { icon: '📞', label: '客服電話', value: '02-1234-5678', sub: '週一至週五 09:00–18:00' },
             { icon: '📍', label: '品牌據點', value: '新北市三重區', sub: '非現場銷售，僅供參考' },
           ].map(({ icon, label, value, sub }) => (

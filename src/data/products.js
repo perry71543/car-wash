@@ -29,8 +29,8 @@ export const products = [
     reviews: 156,
     badge: '專業首選',
     shortDesc: '九H硬度，抗污抗刮，持久三年',
-    description: '汽車等級陶瓷鍍膜，硬化後達 9H 硬度。奈米陶瓷顆粒填補漆面微細孔隙，形成超疏水自潔層。一次施工可維持 3 年防護，有效抵抗酸雨、鳥糞、紫外線等各種傷害。',
-    features: ['9H 硬度保護', '超疏水角度 > 110°', '持續防護 3 年', '30ml 套組'],
+    description: '汽車等級陶瓷鍍膜，硬化後達9H硬度。奈米陶瓷顆粒填補漆面微細孔隙，形成超疏水自潔層。一次施工可維持3年防護，有效抵抗酸雨、鳥糞、紫外線等各種傷害。',
+    features: ['9H硬度保護', '超疏水角度 > 110°', '持續防護3年', '30ml套組'],
     image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=90',
     images: [
       'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=90',
@@ -48,8 +48,8 @@ export const products = [
     reviews: 412,
     badge: null,
     shortDesc: '零刮痕超柔纖維，一組六條',
-    description: '採用 1200GSM 超高密度超細纖維，吸水力是普通毛巾的 8 倍，零刮痕設計徹底保護車漆。雙面設計，一面用於擦拭，一面用於拋光，一組六條滿足各種清潔需求。',
-    features: ['1200GSM 超高密度', '零刮痕雙面設計', '8 倍吸水力', '一組 6 條'],
+    description: '採用1200GSM超高密度超細纖維，吸水力是普通毛巾的8倍，零刮痕設計徹底保護車漆。雙面設計，一面用於擦拭，一面用於拋光，一組六條滿足各種清潔需求。',
+    features: ['1200GSM超高密度', '零刮痕雙面設計', '8倍吸水力', '一組6條'],
     image: 'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=800&q=90',
     images: [
       'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=800&q=90',
@@ -66,8 +66,8 @@ export const products = [
     reviews: 189,
     badge: '新品上市',
     shortDesc: '連接水管即可產生大量泡沫',
-    description: '無需高壓洗車機，直接連接家用水管即可噴出大量濃密泡沫。可調節泡沫濃度與噴灑角度，底部 1L 大容量藥水桶，整車一次完成。不鏽鋼內管防腐蝕，使用壽命長達五年。',
-    features: ['無需高壓機', '可調泡沫濃度', '1L 大容量', '不鏽鋼耐腐蝕'],
+    description: '無需高壓洗車機，直接連接家用水管即可噴出大量濃密泡沫。可調節泡沫濃度與噴灑角度，底部1L大容量藥水桶，整車一次完成。不鏽鋼內管防腐蝕，使用壽命長達五年。',
+    features: ['無需高壓機', '可調泡沫濃度', '1L大容量', '不鏽鋼耐腐蝕'],
     image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=90',
     images: [
       'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=90',

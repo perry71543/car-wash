@@ -46,7 +46,7 @@ export default function BeforeAfterSection() {
             施工前 <span className="text-neon">/</span> 施工後
           </h2>
           <p className="text-zinc-400 text-sm font-body max-w-md mx-auto">
-            拖動中間滑桿，親眼見證 DetailPro 帶來的驚人差異
+            拖動中間滑桿，親眼見證DetailPro帶來的驚人差異
           </p>
         </div>
 

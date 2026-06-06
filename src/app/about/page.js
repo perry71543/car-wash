@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata = {
   title: '品牌故事 — DetailPro',
-  description: '了解 DetailPro 的品牌理念與專業承諾。從台灣車庫起家，打造媲美進口的頂級汽車美容品牌。',
+  description: '了解DetailPro的品牌理念與專業承諾。從台灣車庫起家，打造媲美進口的頂級汽車美容品牌。',
 }
 
 export default function AboutPage() {
@@ -40,13 +40,13 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-zinc-300 font-body text-sm leading-relaxed">
               <p>
-                DetailPro 誕生於 2018 年，創辦人陳建銘是一名汽車工程師，同時也是狂熱的汽車美容愛好者。他發現市場上要嘛是昂貴的進口品牌，要嘛是品質堪憂的廉價品，台灣缺乏一個真正為本地氣候與路況設計的頂級汽車美容品牌。
+                DetailPro誕生於2026年，我們的團隊同時也是狂熱的汽車美容愛好者。我們發現市場上要嘛是昂貴的進口品牌，要嘛是品質堪憂的廉價品，台灣缺乏一個真正為本地氣候與路況設計的頂級汽車美容品牌。
               </p>
               <p>
-                他在新北市的車庫裡開始實驗，結合德國化工技術與台灣工藝精神，研發出第一款針對台灣高溫多濕環境優化的洗車精配方。這款產品在汽車論壇上一炮而紅，引爆了 DetailPro 的快速成長。
+                所以大家在新北市的車庫裡開始實驗，結合德國化工技術與台灣工藝精神，研發出第一款針對台灣高溫多濕環境優化的洗車精配方。這款產品在汽車論壇上一炮而紅，引爆了DetailPro的快速成長。
               </p>
               <p>
-                今天，DetailPro 已擁有超過 50,000 名忠實車主，產品線涵蓋清潔、鍍膜、打蠟、工具等全系列，每一項產品都經過嚴格的實地測試，確保在台灣的真實環境下達到最佳表現。
+                今天，DetailPro 已擁有多名忠實車主，產品線涵蓋清潔、鍍膜、打蠟、工具等全系列，每一項產品都經過嚴格的實地測試，確保在台灣的真實環境下達到最佳表現。
               </p>
             </div>
           </div>
@@ -64,7 +64,7 @@ export default function AboutPage() {
                 <p className="font-display font-700 text-lg text-white leading-snug">
                   「每一輛車都值得<br />最好的護理。」
                 </p>
-                <p className="text-zinc-400 text-xs mt-2 font-body">— 陳建銘，DetailPro 創辦人</p>
+                <p className="text-zinc-400 text-xs mt-2 font-body">— DetailPro創辦人</p>
               </div>
             </div>
           </div>

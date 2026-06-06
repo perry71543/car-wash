@@ -93,9 +93,8 @@ export default function Footer() {
             © {year} DetailPro Taiwan. 保留一切權利。
           </p>
           <div className="flex items-center gap-6">
-            <span className="text-zinc-600 text-xs">全台免運 滿 $1,500</span>
+            <span className="text-zinc-600 text-xs">全台免運 滿$1500元</span>
             <span className="text-zinc-600 text-xs">7天鑑賞期</span>
-            <span className="text-zinc-600 text-xs">台灣本島 48H 到貨</span>
           </div>
         </div>
       </div>
