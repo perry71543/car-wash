@@ -1,25 +1,8 @@
-import '../globals.css'
-import { CartProvider } from '@/context/CartContext'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import CartDrawer from '@/components/CartDrawer'
-
 export const metadata = {
-  title: 'DetailPro — 專業汽車美容用品',
-  description: 'DetailPro 提供頂級汽車美容、洗車精、鍍膜蠟與專業工具，讓您的愛車煥然一新。',
+  title: '常見問題 — DetailPro',
+  description: '詳解 DetailPro 汽車美容產品使用方式、訂單出貨、退換貨政策與鍍膜施工條件等常見疑問。',
 }
 
-export default function RootLayout({ children }) {
-  return (
-    <html lang="zh-TW">
-      <body>
-        <CartProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <CartDrawer />
-        </CartProvider>
-      </body>
-    </html>
-  )
+export default function FaqLayout({ children }) {
+  return children
 }

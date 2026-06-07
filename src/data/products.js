@@ -109,6 +109,45 @@ export const products = [
       'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=90',
     ],
   },
+  // --- 套組禮盒（修正 #6：新增 kits 分類商品）---
+  {
+    id: 'starter-bundle',
+    name: '新手入門套組',
+    category: 'kits',
+    categoryLabel: '套組禮盒',
+    price: 1580,
+    originalPrice: 2100,
+    rating: 4.8,
+    reviews: 324,
+    badge: '超值組合',
+    shortDesc: '四件組，洗車新手最佳起點',
+    description: '包含極泡洗車精 500ml、超細纖維擦拭巾 x2、內裝萬用清潔劑 300ml、施工海綿 x2。完整覆蓋日常洗車所需，免去逐件選購的煩惱，一盒即可開始專業居家保養。',
+    features: ['極泡洗車精 500ml', '擦拭巾 x2', '內裝清潔劑 300ml', '施工海綿 x2'],
+    image: 'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=800&q=90',
+    images: [
+      'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=800&q=90',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=90',
+    ],
+  },
+  {
+    id: 'pro-bundle',
+    name: '專業進階套組',
+    category: 'kits',
+    categoryLabel: '套組禮盒',
+    price: 4980,
+    originalPrice: 7200,
+    rating: 4.9,
+    reviews: 187,
+    badge: '省 $2,220',
+    shortDesc: '六件組，一次備齊專業施工全套',
+    description: '包含陶瓷鍍膜劑 Pro 30ml、極泡洗車精 1L、泡沫炮 Pro 版、巴西棕櫚蠟 200g、超細纖維擦拭巾 x6、施工手套。讓您在家完成媲美專業美容廠的效果，從清潔到鍍膜一次備齊。',
+    features: ['陶瓷鍍膜劑 Pro 30ml', '極泡洗車精 1L', '泡沫炮 Pro 版', '巴西棕櫚蠟 200g', '擦拭巾 x6', '施工手套'],
+    image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=90',
+    images: [
+      'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=90',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=90',
+    ],
+  },
 ]
 
 export const categories = [

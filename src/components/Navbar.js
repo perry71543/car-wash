@@ -6,13 +6,48 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useCart } from '@/context/CartContext'
 import { products } from '@/data/products'
 
+// English → Chinese keyword mapping for cross-language search
+const searchMap = {
+  foam: '泡沫',
+  shampoo: '洗車精',
+  ceramic: '陶瓷',
+  coating: '鍍膜',
+  wax: '蠟',
+  towel: '擦拭巾',
+  microfiber: '擦拭巾',
+  polish: '拋光',
+  gun: '泡沫炮',
+  kit: '套組',
+  bundle: '套組',
+  interior: '內裝',
+  cleaner: '清潔',
+  carnauba: '棕櫚蠟',
+  pro: 'pro',
+}
+
+function filterProducts(query) {
+  if (!query || query.length < 1) return []
+  const lower = query.toLowerCase()
+  // Translate English keywords to Chinese if matched
+  const translated = searchMap[lower] || query
+  return products
+    .filter((p) =>
+      p.name.includes(translated) ||
+      p.name.toLowerCase().includes(lower) ||
+      p.shortDesc.includes(translated) ||
+      p.shortDesc.toLowerCase().includes(lower) ||
+      p.categoryLabel.includes(translated) ||
+      p.categoryLabel.toLowerCase().includes(lower)
+    )
+    .slice(0, 5)
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [mobileQuery, setMobileQuery] = useState('')
-  const [mobileResults, setMobileResults] = useState([])
   const searchRef = useRef(null)
   const inputRef = useRef(null)
   const { totalCount, setIsOpen: openCart } = useCart()
@@ -25,7 +60,6 @@ export default function Navbar() {
     setSearchOpen(false)
     setQuery('')
     setMobileQuery('')
-    setMobileResults([])
   }, [pathname])
 
   useEffect(() => {
@@ -63,27 +97,8 @@ export default function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
-  const results = query.length >= 1
-    ? products.filter((p) =>
-        p.name.includes(query) ||
-        p.shortDesc.includes(query) ||
-        p.categoryLabel.includes(query)
-      ).slice(0, 5)
-    : []
-
-  const handleMobileQuery = (q) => {
-    setMobileQuery(q)
-    if (q.length >= 1) {
-      const r = products.filter((p) =>
-        p.name.includes(q) ||
-        p.shortDesc.includes(q) ||
-        p.categoryLabel.includes(q)
-      ).slice(0, 5)
-      setMobileResults(r)
-    } else {
-      setMobileResults([])
-    }
-  }
+  const results = filterProducts(query)
+  const mobileResults = filterProducts(mobileQuery)
 
   const handleSearchSubmit = (e) => {
     e.preventDefault()
@@ -166,7 +181,7 @@ export default function Navbar() {
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="搜尋商品..."
+                    placeholder="搜尋商品（支援中英文）..."
                     className="w-full bg-transparent text-sm font-body text-white placeholder-zinc-600 px-3 py-3 focus:outline-none"
                   />
                   {query && (
@@ -265,13 +280,13 @@ export default function Navbar() {
               </svg>
               <input
                 type="text"
-                placeholder="搜尋商品..."
+                placeholder="搜尋商品（支援中英文）..."
                 value={mobileQuery}
                 className="w-full bg-transparent text-sm font-body text-white placeholder-zinc-600 px-3 py-2.5 focus:outline-none"
-                onChange={(e) => handleMobileQuery(e.target.value)}
+                onChange={(e) => setMobileQuery(e.target.value)}
               />
               {mobileQuery && (
-                <button type="button" onClick={() => { setMobileQuery(''); setMobileResults([]) }} className="text-zinc-500 hover:text-white">
+                <button type="button" onClick={() => setMobileQuery('')} className="text-zinc-500 hover:text-white">
                   <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M18 6L6 18M6 6l12 12"/>
                   </svg>
