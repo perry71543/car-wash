@@ -1,9 +1,24 @@
 import './globals.css'
+import { Barlow_Condensed, Barlow } from 'next/font/google'
 import { CartProvider } from '@/context/CartContext'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import CartDrawer from '@/components/CartDrawer'
 import GlobalToast from '@/components/GlobalToast'
+
+const barlowCondensed = Barlow_Condensed({
+  subsets: ['latin'],
+  weight: ['400', '600', '700', '800', '900'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+const barlow = Barlow({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-body',
+  display: 'swap',
+})
 
 export const metadata = {
   title: 'DetailPro — 專業汽車美容用品',
@@ -32,6 +47,7 @@ export const metadata = {
   },
 }
 
+// Fix 8: JSON-LD — replace placeholder phone with real number before going live
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -46,7 +62,7 @@ const jsonLd = [
     ],
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+886-2-1234-5678',
+      telephone: '+886-2-XXXX-XXXX', // TODO: replace with real number
       contactType: 'customer service',
       availableLanguage: '中文',
     },
@@ -69,7 +85,7 @@ const jsonLd = [
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="zh-TW">
+    <html lang="zh-TW" className={`${barlowCondensed.variable} ${barlow.variable}`}>
       <head>
         <script
           type="application/ld+json"

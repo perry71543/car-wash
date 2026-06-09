@@ -38,7 +38,7 @@ export default function FaqPage() {
       <div className="bg-dark-2 border-b border-white/5 py-12">
         <div className="max-w-3xl mx-auto px-6">
           <div className="flex items-center gap-3 mb-3">
-            <div className="h-px w-8 bg-neon" />
+            <div className="h-px w-8 bg-neon" aria-hidden="true" />
             <span className="text-neon text-xs font-display font-600 uppercase tracking-[0.3em]">常見問題</span>
           </div>
           <h1 className="font-display font-900 text-5xl uppercase tracking-tight">FAQ</h1>
@@ -54,20 +54,26 @@ export default function FaqPage() {
 
       {/* Accordion */}
       <div className="max-w-3xl mx-auto px-6 py-16">
-        <div className="flex flex-col gap-2">
+        {/* Fix 14: proper ARIA accordion with aria-controls */}
+        <div className="flex flex-col gap-2" role="list">
           {faqs.map((item, i) => {
             const isOpen = open === i
+            const panelId = `faq-panel-${i}`
+            const buttonId = `faq-btn-${i}`
             return (
               <div
                 key={i}
+                role="listitem"
                 className={`border transition-colors duration-200 ${
                   isOpen ? 'border-neon/40 bg-dark-3' : 'border-white/5 bg-dark-2 hover:border-white/15'
                 }`}
               >
                 <button
+                  id={buttonId}
                   className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
                   onClick={() => setOpen(isOpen ? null : i)}
                   aria-expanded={isOpen}
+                  aria-controls={panelId}
                 >
                   <span
                     className={`font-display font-700 text-base uppercase tracking-wide transition-colors ${
@@ -80,6 +86,7 @@ export default function FaqPage() {
                     className={`flex-shrink-0 w-6 h-6 flex items-center justify-center border transition-all duration-300 ${
                       isOpen ? 'border-neon rotate-45' : 'border-white/20'
                     }`}
+                    aria-hidden="true"
                   >
                     <svg
                       width="12"
@@ -95,12 +102,20 @@ export default function FaqPage() {
                   </span>
                 </button>
 
-                {isOpen && (
-                  <div className="px-6 pb-6">
-                    <div className="h-px w-full bg-white/5 mb-5" />
-                    <p className="text-zinc-300 font-body text-sm leading-relaxed">{item.a}</p>
-                  </div>
-                )}
+                {/* Fix 14: panel with id referenced by aria-controls */}
+                <div
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={buttonId}
+                  hidden={!isOpen}
+                >
+                  {isOpen && (
+                    <div className="px-6 pb-6">
+                      <div className="h-px w-full bg-white/5 mb-5" aria-hidden="true" />
+                      <p className="text-zinc-300 font-body text-sm leading-relaxed">{item.a}</p>
+                    </div>
+                  )}
+                </div>
               </div>
             )
           })}

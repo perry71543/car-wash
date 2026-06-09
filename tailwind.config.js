@@ -22,12 +22,9 @@ module.exports = {
         display: ['var(--font-display)', 'sans-serif'],
         body: ['var(--font-body)', 'sans-serif'],
       },
-      fontWeight: {
-        600: '600',
-        700: '700',
-        800: '800',
-        900: '900',
-      },
+      // Fix 19: removed redundant fontWeight entries (Tailwind already has
+      // font-semibold=600, font-bold=700, font-extrabold=800, font-black=900)
+      // Custom .font-600/.font-700 etc. utility classes are defined in globals.css @layer utilities
       animation: {
         'fade-up': 'fadeUp 0.6s ease forwards',
         'fade-in': 'fadeIn 0.8s ease forwards',

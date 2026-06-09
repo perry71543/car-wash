@@ -4,7 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useCart } from '@/context/CartContext'
 
-const SHIPPING_THRESHOLD = 2000
+// Fix 3: unified threshold (also matches CartDrawer's NT$1,500)
+const SHIPPING_THRESHOLD = 1500
 const SHIPPING_FEE = 120
 
 export default function CartPage() {
@@ -14,6 +15,15 @@ export default function CartPage() {
   const shippingFree = subtotal >= SHIPPING_THRESHOLD
   const shipping = shippingFree ? 0 : items.length > 0 ? SHIPPING_FEE : 0
   const total = subtotal + shipping
+
+  // Fix 22: qty decrement to 0 auto-removes
+  const handleQtyChange = (id, newQty) => {
+    if (newQty < 1) {
+      removeItem(id)
+    } else {
+      updateQty(id, newQty)
+    }
+  }
 
   if (items.length === 0) {
     return (
@@ -92,19 +102,20 @@ export default function CartPage() {
                   </div>
 
                   <div className="flex items-center justify-between mt-3">
-                    {/* Qty control */}
+                    {/* Qty control — Fix 22: − at qty=1 removes item */}
                     <div className="flex items-center border border-white/10">
                       <button
-                        onClick={() => updateQty(item.id, item.qty - 1)}
-                        disabled={item.qty <= 1}
-                        className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-white disabled:opacity-30 transition-colors text-base"
+                        onClick={() => handleQtyChange(item.id, item.qty - 1)}
+                        className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-red-400 transition-colors text-base"
+                        aria-label="減少數量"
                       >
                         −
                       </button>
                       <span className="w-8 text-center font-display font-700 text-sm">{item.qty}</span>
                       <button
-                        onClick={() => updateQty(item.id, item.qty + 1)}
+                        onClick={() => handleQtyChange(item.id, item.qty + 1)}
                         className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-white transition-colors text-base"
+                        aria-label="增加數量"
                       >
                         +
                       </button>
@@ -169,19 +180,27 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <button
-                onClick={() => alert('結帳功能即將上線，敬請期待！')}
-                className="w-full bg-neon text-black font-display font-700 uppercase tracking-widest py-4 text-sm hover:bg-neon-dim transition-colors neon-glow mb-3"
-              >
-                前往結帳
-              </button>
+              {/* Fix 1: honest checkout button with coming-soon state */}
+              <div className="relative mb-3">
+                <button
+                  disabled
+                  className="w-full bg-neon/40 text-black/50 font-display font-700 uppercase tracking-widest py-4 text-sm cursor-not-allowed"
+                >
+                  前往結帳
+                </button>
+                <div className="absolute inset-x-0 -bottom-5 text-center">
+                  <span className="text-xs text-zinc-500 font-body">結帳功能即將上線，敬請期待</span>
+                </div>
+              </div>
 
-              <Link
-                href="/products"
-                className="block w-full text-center border border-white/10 text-zinc-400 font-display font-600 uppercase tracking-widest py-3 text-sm hover:border-neon hover:text-neon transition-all"
-              >
-                繼續購物
-              </Link>
+              <div className="mt-8">
+                <Link
+                  href="/products"
+                  className="block w-full text-center border border-white/10 text-zinc-400 font-display font-600 uppercase tracking-widest py-3 text-sm hover:border-neon hover:text-neon transition-all"
+                >
+                  繼續購物
+                </Link>
+              </div>
 
               {/* Trust badges */}
               <div className="mt-6 flex flex-col gap-2">
