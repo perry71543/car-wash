@@ -23,6 +23,12 @@ const searchMap = {
   cleaner: '清潔',
   carnauba: '棕櫚蠟',
   pro: 'pro',
+  polisher: '拋光機',
+  brush: '刷具',
+  glove: '手套',
+  bucket: '水桶',
+  sprayer: '噴壺',
+  washer: '清洗機',
 }
 
 function filterProducts(query) {
@@ -115,9 +121,11 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/products', label: '全部商品' },
-    { href: '/products?category=shampoo', label: '洗車精' },
-    { href: '/products?category=coating', label: '鍍膜蠟' },
-    { href: '/products?category=tools', label: '工具' },
+    { href: '/products?category=cleaners', label: '清潔去污' },
+    { href: '/products?category=wax-coating', label: '上蠟鍍膜' },
+    { href: '/products?category=interior', label: '內裝護理' },
+    { href: '/products?category=polisher', label: '拋光機具' },
+    { href: '/products?category=tools', label: '洗車工具' },
     { href: '/about', label: '品牌故事' },
   ]
 
@@ -144,7 +152,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-6">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}

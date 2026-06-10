@@ -51,10 +51,11 @@ export default function Footer() {
             <h4 className="font-display uppercase tracking-widest text-sm font-600 mb-4">商品分類</h4>
             <ul className="flex flex-col gap-2">
               {[
-                { label: '洗車精', href: '/products?category=shampoo' },
-                { label: '鍍膜蠟', href: '/products?category=coating' },
-                { label: '美容工具', href: '/products?category=tools' },
-                { label: '套組禮盒', href: '/products?category=kits' },
+                { label: '清潔與去污劑', href: '/products?category=cleaners' },
+                { label: '車漆上蠟與封體鍍膜', href: '/products?category=wax-coating' },
+                { label: '內裝與細部護理', href: '/products?category=interior' },
+                { label: '拋光打蠟機與耗材組', href: '/products?category=polisher' },
+                { label: '洗車工具與五金配件', href: '/products?category=tools' },
                 { label: '全部商品', href: '/products' },
               ].map(({ label, href }) => (
                 <li key={label}>
